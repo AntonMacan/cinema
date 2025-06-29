@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Database\Migrations;
-
 use CodeIgniter\Database\Migration;
 
 class CreateSpettacoli extends Migration
@@ -9,11 +7,7 @@ class CreateSpettacoli extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id' => [
-            'type' => 'INT',
-            'unsigned' => true,
-            'auto_increment' => true
-            ],
+            'id'            => ['type' => 'SERIAL', 'null' => false],
             'titolo'        => ['type' => 'VARCHAR', 'constraint' => 255],
             'descrizione'   => ['type' => 'TEXT'],
             'cast'          => ['type' => 'TEXT'],
@@ -22,6 +16,7 @@ class CreateSpettacoli extends Migration
             'updated_at'    => ['type' => 'TIMESTAMP', 'null' => true],
         ]);
         $this->forge->addKey('id', true);
+        $this->forge->addForeignKey('compagnia_id', 'compagnie_teatrali', 'id', 'NO ACTION', 'SET NULL');
         $this->forge->createTable('spettacoli');
     }
 

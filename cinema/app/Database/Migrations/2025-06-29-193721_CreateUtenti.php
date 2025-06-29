@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateUsers extends Migration
+class CreateUtenti extends Migration
 {
     public function up()
 {
@@ -23,12 +23,12 @@ class CreateUsers extends Migration
         'updated_at' => ['type' => 'TIMESTAMP', 'null' => true],
     ]);
     $this->forge->addKey('id', true);
-    $this->forge->createTable('users');
+    $this->forge->createTable('utenti');
 }
 
 public function down()
 {
-    $this->forge->dropTable('users');
+    $this->forge->dropTable('utenti');
 }
 
 }

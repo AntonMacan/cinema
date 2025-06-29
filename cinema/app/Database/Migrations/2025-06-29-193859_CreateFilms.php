@@ -22,11 +22,12 @@ class CreateFilms extends Migration
             'updated_at'  => ['type' => 'TIMESTAMP', 'null' => true],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('films');
+        $this->forge->addForeignKey('fornitore_id', 'fornitori', 'id', 'NO ACTION', 'SET NULL');
+        $this->forge->createTable('film');
     }
 
     public function down()
     {
-        $this->forge->dropTable('films');
+        $this->forge->dropTable('film');
     }
 }
