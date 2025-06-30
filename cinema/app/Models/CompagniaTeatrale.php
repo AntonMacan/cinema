@@ -10,4 +10,5 @@ class CompagniaTeatrale extends Model
     protected $primaryKey       = 'id';
     protected $allowedFields    = ['nome', 'contatto'];
     protected $useTimestamps    = true;
+    protected $returnType = 'object';
 }

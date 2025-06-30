@@ -10,4 +10,5 @@ class FasciaOraria extends Model
     protected $primaryKey       = 'id';
     protected $allowedFields    = ['nome', 'orario'];
     protected $useTimestamps    = false; // Questa tabella non ha i campi created_at/updated_at
+    protected $returnType = 'object';
 }

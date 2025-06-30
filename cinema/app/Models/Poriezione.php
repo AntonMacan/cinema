@@ -15,6 +15,7 @@ class Proiezione extends Model
         'data', 
         'gestore_id'
     ];
+    protected $returnType = 'object';
 
     protected $useTimestamps    = true;
 

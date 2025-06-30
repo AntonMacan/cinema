@@ -9,7 +9,7 @@ class Biglietto extends Model
     protected $table            = 'biglietti';
     protected $primaryKey       = 'id';
     protected $allowedFields    = ['cliente_id', 'proiezione_id', 'tipo', 'prezzo', 'pagamento_id', 'created_at'];
-    
+    protected $returnType = 'object';
     protected $useTimestamps    = true;
     protected $createdField     = 'created_at';
     protected $updatedField     = null;

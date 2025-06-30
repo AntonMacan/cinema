@@ -16,6 +16,7 @@ class Utente extends Model
         'data_nascita',
         'ruolo' // Importante per distinguere i ruoli (cliente, gestore, ecc.)
     ];
+    protected $returnType = 'object';
 
     protected $useTimestamps    = true;
     protected $createdField     = 'created_at';

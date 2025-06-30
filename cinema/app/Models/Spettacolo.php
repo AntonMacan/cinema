@@ -10,4 +10,5 @@ class Spettacolo extends Model
     protected $primaryKey       = 'id';
     protected $allowedFields    = ['titolo', 'descrizione', 'cast', 'compagnia_id'];
     protected $useTimestamps    = true;
+    protected $returnType = 'object';
 }
