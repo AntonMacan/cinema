@@ -1,6 +1,41 @@
-<IfModule authz_core_module>
-	Require all denied
+# Protect front controller and index.php
+<IfModule mod_authz_core.c>
+    Require all denied
 </IfModule>
-<IfModule !authz_core_module>
-	Deny from all
+<Files index.php>
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+</Files>
+
+# Main CodeIgniter rewrite rules
+<IfModule mod_rewrite.c>
+    Options +FollowSymLinks
+    RewriteEngine On
+
+    # If you want to force HTTPS, uncomment the following two lines
+    # RewriteCond %{HTTPS} !=on
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Suppress "No input file specified" message
+<IfModule mod_cgi.c>
+    #EnableSendFile Off
+    #<IfModule mod_fcgid.c>
+    #    FcgidMaxRequestsPerProcess 0
+    #</IfModule>
 </IfModule>
