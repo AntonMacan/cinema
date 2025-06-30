@@ -123,4 +123,17 @@ class UtenteController extends BaseController
         // Se è una richiesta GET, mostra semplicemente il form di login
         return view('login');
     }
+
+
+     /**
+     * Esegue il logout dell'utente distruggendo la sessione.
+     */
+    public function logout()
+    {
+        // Distrugge tutti i dati della sessione
+        session()->destroy();
+        
+        // Reindirizza alla pagina di login con un messaggio
+        return redirect()->to('/login')->with('success', 'Sei stato disconnesso con successo.');
+    }
 }
