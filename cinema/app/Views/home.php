@@ -19,7 +19,7 @@ Proiezioni
                     echo '</ul>';
                 }
                 $currentDate = $proiezione->data;
-                echo '<h2>' . date('d.m.Y, l', strtotime($currentDate)) . '</h2>';
+                echo '<h2>' . \CodeIgniter\I18n\Time::parse($currentDate)->toLocalizedString('dd.MM.y, EEEE') . '</h2>';
                 echo '<ul>';
             }
             ?>

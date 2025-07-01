@@ -21,8 +21,7 @@
             <?php foreach ($proiezioni as $proiezione): ?>
                 <li>
                     <a href="/reservation/<?= $proiezione->id ?>">
-                        <?= date('d.m.Y, l', strtotime($proiezione->data)) ?> 
-                        alle ore <?= date('H:i', strtotime($proiezione->orario)) ?>
+                    <?= \CodeIgniter\I18n\Time::parse($proiezione->data . ' ' . $proiezione->orario)->toLocalizedString('dd MMMM yyyy, EEEE, HH:mm') ?>h
                     </a>
                 </li>
             <?php endforeach; ?>
