@@ -6,9 +6,12 @@ use CodeIgniter\Model;
 
 class FasciaOraria extends Model
 {
+    public $id;
+    public $nome;
+
     protected $table            = 'fasce_orarie';
+    protected $returnType       = 'App\Models\FasciaOraria';
     protected $primaryKey       = 'id';
-    protected $allowedFields    = ['nome', 'orario'];
-    protected $useTimestamps    = false; // Questa tabella non ha i campi created_at/updated_at
-    protected $returnType = 'object';
+    protected $allowedFields    = ['nome'];
+    protected $useTimestamps    = false;
 }
