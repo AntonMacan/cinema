@@ -6,26 +6,33 @@ use CodeIgniter\Model;
 
 class Biglietto extends Model
 {
+    public $id;
+    public $cliente_id;
+    public $proiezione_id;
+    public $tipo;
+    public $prezzo;
+    public $pagamento_id;
+    public $created_at;
+    
     protected $table            = 'biglietti';
+    protected $returnType       = 'App\Models\Biglietto';
     protected $primaryKey       = 'id';
     protected $allowedFields    = ['cliente_id', 'proiezione_id', 'tipo', 'prezzo', 'pagamento_id', 'created_at'];
-    protected $returnType = 'object';
-    protected $useTimestamps    = true;
-    protected $createdField     = 'created_at';
-    protected $updatedField     = null;
+
+    protected $useTimestamps    = false;
 
     public function proiezione()
     {
-        return $this->belongsTo(Proiezione::class, 'proiezione_id', 'id');
+        return $this->belongsTo(Proiezione::class, 'proiezione_id');
     }
 
     public function cliente()
     {
-        return $this->belongsTo(User::class, 'cliente_id', 'id');
+        return $this->belongsTo(Utente::class, 'cliente_id');
     }
 
     public function pagamento()
     {
-        return $this->belongsTo(Pagamento::class, 'pagamento_id', 'id');
+        return $this->belongsTo(Pagamento::class, 'pagamento_id');
     }
 }
