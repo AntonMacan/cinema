@@ -31,6 +31,9 @@ Proiezioni
                         $spettacolo = $proiezione->spettacolo;
                     ?>
                     <?php if ($film): ?>
+                        <?php if ($film->poster): ?>
+                            <img src="/uploads/posters/<?= esc($film->poster) ?>" alt="<?= esc($film->titolo) ?>" width="100" style="float:left; margin-right: 15px;">
+                        <?php endif; ?>
                         <a href="/film/<?= $film->id ?>" class="content-title"><?= esc($film->titolo) ?></a>
                     <?php elseif ($spettacolo): ?>
                         <a href="/spettacolo/<?= $spettacolo->id ?>" class="content-title"><?= esc($spettacolo->titolo) ?></a>

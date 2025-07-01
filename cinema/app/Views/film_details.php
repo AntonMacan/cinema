@@ -7,6 +7,9 @@
     <a href="/">&laquo; Torna al repertorio</a>
     
     <h1><?= esc($film->titolo) ?></h1>
+    <?php if ($film->poster): ?>
+        <img src="/uploads/posters/<?= esc($film->poster) ?>" alt="<?= esc($film->titolo) ?>" style="max-width: 250px; float: left; margin-right: 20px;">
+    <?php endif; ?>
     
     <h3>Cast: <?= esc($film->cast) ?></h3>
     

@@ -10,6 +10,7 @@ class Film extends Model
     public $titolo;
     public $sinossi;
     public $cast;
+    public $poster;
     public $fornitore_id;
     public $created_at;
     public $updated_at;
@@ -17,7 +18,7 @@ class Film extends Model
     protected $table            = 'film';
     protected $returnType       = 'App\Models\Film';
     protected $primaryKey       = 'id';
-    protected $allowedFields    = ['titolo', 'sinossi', 'cast', 'fornitore_id'];
+    protected $allowedFields    = ['titolo', 'sinossi', 'cast', 'fornitore_id','poster'];
     protected $useTimestamps    = true;
 
     /**

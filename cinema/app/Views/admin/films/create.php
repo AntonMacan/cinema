@@ -16,7 +16,7 @@ Nuovo Film
         </div>
     <?php endif ?>
 
-    <form action="/admin/films/create" method="post">
+    <form action="/admin/films/create" method="post" enctype="multipart/form-data">
         <?= csrf_field() ?>
 
         <div class="form-group">
@@ -30,6 +30,10 @@ Nuovo Film
         <div class="form-group">
             <label for="cast">Cast</label>
             <input type="text" name="cast" value="<?= old('cast') ?>">
+        </div>
+    <div class="form-group">
+            <label for="poster">Poster del Film</label>
+            <input type="file" name="poster" id="poster">
         </div>
         <div class="form-group">
             <label for="fornitore_id">Fornitore</label>

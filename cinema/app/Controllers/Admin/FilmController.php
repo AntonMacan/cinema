@@ -37,29 +37,45 @@ class FilmController extends BaseController
      * Processa i dati dal form e salva un nuovo film.
      */
     public function create()
-    {
-        $rules = [
-            'titolo'       => 'required|min_length[3]',
-            'sinossi'      => 'required',
-            'fornitore_id' => 'required|is_natural_no_zero'
-        ];
+{
+    // Aggiungiamo le regole per l'upload del file
+    $rules = [
+        'titolo'       => 'required|min_length[3]',
+        'sinossi'      => 'required',
+        'fornitore_id' => 'required|is_natural_no_zero',
+        'poster'       => [
+            'label' => 'Image File',
+            'rules' => 'if_exist|is_image[poster]|mime_in[poster,image/jpg,image/jpeg,image/gif,image/png,image/webp]|max_size[poster,2048]',
+        ],
+    ];
 
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
-
-        $filmModel = new Film();
-        $data = [
-            'titolo'       => $this->request->getPost('titolo'),
-            'sinossi'      => $this->request->getPost('sinossi'),
-            'cast'         => $this->request->getPost('cast'),
-            'fornitore_id' => $this->request->getPost('fornitore_id')
-        ];
-
-        $filmModel->save($data);
-
-        return redirect()->to('/admin/films')->with('success', 'Film creato con successo.');
+    if (!$this->validate($rules)) {
+        return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
     }
+
+    $file = $this->request->getFile('poster');
+    $posterName = null;
+
+    // Se un file è stato caricato ed è valido
+    if ($file->isValid() && !$file->hasMoved()) {
+        // Genera un nome casuale per evitare conflitti
+        $posterName = $file->getRandomName();
+        // Sposta il file nella cartella di destinazione
+        $file->move(FCPATH . 'uploads/posters', $posterName);
+    }
+
+    $filmModel = new \App\Models\Film();
+    $data = [
+        'titolo'       => $this->request->getPost('titolo'),
+        'sinossi'      => $this->request->getPost('sinossi'),
+        'cast'         => $this->request->getPost('cast'),
+        'fornitore_id' => $this->request->getPost('fornitore_id'),
+        'poster'       => $posterName, // Salva il nome del file nel database
+    ];
+    $filmModel->save($data);
+
+    return redirect()->to('/admin/films')->with('success', 'Film creato con successo.');
+}
 
     /**
      * Mostra il form per modificare un film esistente.
@@ -88,28 +104,44 @@ class FilmController extends BaseController
      */
     public function update($id)
     {
-        $rules = [
-            'titolo'       => 'required|min_length[3]',
-            'sinossi'      => 'required',
-            'fornitore_id' => 'required|is_natural_no_zero'
-        ];
-
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
-
-        $filmModel = new Film();
-        $data = [
-            'titolo'       => $this->request->getPost('titolo'),
-            'sinossi'      => $this->request->getPost('sinossi'),
-            'cast'         => $this->request->getPost('cast'),
-            'fornitore_id' => $this->request->getPost('fornitore_id')
-        ];
-
-        $filmModel->update($id, $data);
-
-        return redirect()->to('/admin/films')->with('success', 'Film aggiornato con successo.');
+         $rules = [
+        'titolo'       => 'required|min_length[3]',
+        'sinossi'      => 'required',
+        'fornitore_id' => 'required|is_natural_no_zero',
+        'poster'       => [
+            'label' => 'Image File',
+            'rules' => 'if_exist|is_image[poster]|mime_in[poster,image/jpg,image/jpeg,image/gif,image/png,image/webp]|max_size[poster,2048]',
+        ],
+    ];
+    if (!$this->validate($rules)) {
+        return redirect()->back()->withInput()->with('errors', 'Dati non validi.');
     }
+
+    $filmModel = new Film();
+    $oldFilm = $filmModel->find($id);
+
+    $file = $this->request->getFile('poster');
+    $posterName = $oldFilm->poster;
+
+    if ($file->isValid() && !$file->hasMoved()) {
+        if ($oldFilm->poster && file_exists('uploads/posters/' . $oldFilm->poster)) {
+            unlink('uploads/posters/' . $oldFilm->poster);
+        }
+        $posterName = $file->getRandomName();
+        $file->move(FCPATH . 'uploads/posters', $posterName);
+    }
+
+    $data = [
+        'titolo'       => $this->request->getPost('titolo'),
+        'sinossi'      => $this->request->getPost('sinossi'),
+        'cast'         => $this->request->getPost('cast'),
+        'fornitore_id' => $this->request->getPost('fornitore_id'),
+        'poster'       => $posterName,
+    ];
+    $filmModel->update($id, $data);
+
+    return redirect()->to('/admin/films')->with('success', 'Film aggiornato con successo.');
+}
 
     /**
      * Elimina un film specifico.

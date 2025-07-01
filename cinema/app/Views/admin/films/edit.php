@@ -9,7 +9,7 @@ Modifica Film
     <?php if (session()->get('errors')): ?>
         <?php endif ?>
 
-    <form action="/admin/films/update/<?= $film->id ?>" method="post">
+    <form action="/admin/films/update/<?= $film->id ?>" method="post" enctype="multipart/form-data">
         <?= csrf_field() ?>
 
         <div class="form-group">
@@ -24,6 +24,17 @@ Modifica Film
             <label for="cast">Cast</label>
             <input type="text" name="cast" value="<?= old('cast', $film->cast) ?>">
         </div>
+        <div class="form-group">
+        <label for="poster">Nuovo Poster (lasciare vuoto per non modificare)</label>
+        <input type="file" name="poster" id="poster">
+        </div>
+
+        <?php if ($film->poster): ?>
+            <div class="form-group">
+                <label>Poster Attuale:</label><br>
+                <img src="/uploads/posters/<?= esc($film->poster) ?>" alt="Poster" height="150">
+            </div>
+        <?php endif; ?>
         <div class="form-group">
             <label for="fornitore_id">Fornitore</label>
             <select name="fornitore_id">
