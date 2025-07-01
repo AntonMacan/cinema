@@ -12,22 +12,65 @@ class HomeController extends BaseController
      * Mostra la homepage con la lista di tutte le proiezioni future.
      */
     public function index()
-    {
-        $proiezioneModel = new Proiezione();
-        $today = date('Y-m-d'); // Ottiene la data di oggi
+{
+    $proiezioneModel = new \App\Models\Proiezione();
+    $today = date('Y-m-d');
+    $tomorrow = date('Y-m-d', strtotime('+1 day'));
+    $endDate = date('Y-m-d', strtotime('+30 days'));
 
-        $data = [
-            'proiezioni' => $proiezioneModel
-                ->where('data >=', $today) // Solo proiezioni da oggi in poi
-                ->orderBy('data', 'ASC')   // Ordina per data (dal più vicino al più lontano)
-                ->orderBy('orario', 'ASC')  // Poi ordina per orario
-                ->findAll()
-        ];
+    // Ottiene l'orario attuale per il confronto
+    $currentTime = date('H:i:s');
 
-        // Carica la vista della homepage e passa i dati
-        return view('home', $data);
+    // Query modificata per escludere le proiezioni passate di oggi
+    $proiezioni = $proiezioneModel
+        // Inizia un gruppo di condizioni: ( ... )
+        ->groupStart()
+            // Condizione A: la data è nel futuro (dopo oggi)
+            ->where('data >', $today)
+            // O (OR) un altro gruppo di condizioni annidate
+            ->orGroupStart()
+                // Condizione B: la data è oggi E l'orario è nel futuro
+                ->where('data', $today)
+                ->where('orario >', $currentTime)
+            ->groupEnd()
+        ->groupEnd()
+        // E la data deve essere entro il nostro limite di 30 giorni
+        ->where('data <=', $endDate)
+        ->orderBy('data', 'ASC')
+        ->orderBy('orario', 'ASC')
+        ->findAll();
+
+    // Ostatak metode za grupiranje za galeriju ostaje POTPUNO ISTI
+    $contenutiConProiezioni = [];
+    foreach ($proiezioni as $proiezione) {
+        $contenuto = $proiezione->getFilm() ?? $proiezione->spettacolo;
+        if (!$contenuto) continue;
+
+        $contenutoKey = ($proiezione->film_id ? 'film_' : 'spettacolo_') . $contenuto->id;
+
+        if (!isset($contenutiConProiezioni[$contenutoKey])) {
+            $contenutiConProiezioni[$contenutoKey] = [
+                'contenuto' => $contenuto,
+                'tipo' => $proiezione->film_id ? 'film' : 'spettacolo',
+                'proiezioni_oggi' => [],
+                'proiezioni_domani' => [],
+            ];
+        }
+        if ($proiezione->data == $today) {
+            $contenutiConProiezioni[$contenutoKey]['proiezioni_oggi'][] = $proiezione;
+        } elseif ($proiezione->data == $tomorrow) {
+            $contenutiConProiezioni[$contenutoKey]['proiezioni_domani'][] = $proiezione;
+        }
     }
 
+    $data = [
+        'films_e_spettacoli' => $contenutiConProiezioni,
+        'tutte_le_proiezioni' => $proiezioni, // Sada šaljemo već filtriranu listu
+        'dataOggi' => $today
+    ];
+
+    return view('home', $data);
+}
     /**
      * Mostra la pagina di dettaglio per un singolo film.
      * @param int $id ID del film

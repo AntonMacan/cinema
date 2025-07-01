@@ -164,3 +164,315 @@ button[type="submit"]:hover {
 }
 .ticket-header h3 { margin: 0; }
 .ticket-details { margin-top: 10px; }
+
+
+/* =================================
+   STILOVI ZA GALERIJU FILMOVA
+==================================== */
+
+.film-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.film-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.film-poster {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 3; /* Održava omjer slike postera */
+    object-fit: cover; /* Osigurava da slika popuni prostor bez izobličenja */
+}
+
+.film-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Osigurava da ovaj dio zauzme preostali prostor */
+}
+
+.film-info h3 {
+    margin-top: 0;
+    font-size: 1.2em;
+}
+
+.film-info h3 a {
+    color: #333;
+}
+
+.termini {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.termini-day {
+    margin-bottom: 5px;
+}
+
+.termini-day strong {
+    color: #555;
+}
+
+.termin-link {
+    display: inline-block;
+    background-color: #e9ecef;
+    padding: 5px 8px;
+    border-radius: 4px;
+    margin: 2px;
+    font-weight: bold;
+    color: #333;
+}
+.termin-link:hover {
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+}
+
+.details-button {
+    display: block;
+    background-color: #555;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: auto; /* Gura gumb na dno kartice */
+}
+
+.details-button:hover {
+    background-color: #333;
+    text-decoration: none;
+}
+
+.filters-section .filters {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+.filters-section .form-group {
+    flex: 1;
+}
+#full-schedule-list .schedule-item {
+    background-color: white;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+/* =================================
+   STILOVI ZA STRANICU S DETALJIMA
+==================================== */
+
+.details-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr; /* Lijeva kolona 300px, desna zauzima ostatak */
+    gap: 30px; /* Razmak između kolona */
+}
+
+.details-left .details-poster {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.details-right h1 {
+    margin-top: 0;
+}
+
+.sinossi {
+    line-height: 1.7;
+}
+
+.proiezioni-section {
+    margin-top: 30px;
+}
+
+.termini-day-group {
+    margin-bottom: 20px;
+}
+
+.termini-day-group .termin-link {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.star-rating .star {
+    font-size: 2em; /* Veličina zvjezdica */
+    cursor: default;
+}
+
+/* Stil za punu zvijezdu */
+.star-rating .full {
+    color: #ffc107; /* Žuta boja */
+}
+
+/* Stil za praznu zvijezdu */
+.star-rating .empty {
+    color: #e4e5e9; /* Siva boja */
+}
+
+/* CSS TRIK: Stil za polovičnu zvijezdu */
+.star-rating .half {
+    /* Koristimo gradient kao pozadinu za tekst */
+    background: linear-gradient(90deg, #ffc107 50%, #e4e5e9 50%);
+    -webkit-background-clip: text; /* "Izreži" pozadinu u obliku teksta (zvijezde) */
+    background-clip: text;
+    -webkit-text-fill-color: transparent; /* Učini sam tekst prozirnim da se vidi pozadina */
+}
+
+.star-rating .rating-text {
+    font-size: 1.2em;
+    font-weight: bold;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+
+/* =================================
+   STILOVI ZA BOOKING STRANICU
+==================================== */
+.booking-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.booking-summary {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #eee;
+}
+
+.booking-summary img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.booking-summary h2 {
+    margin-top: 0;
+    border: none;
+}
+
+.ticket-selection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.ticket-selection label {
+    margin: 0;
+    font-size: 1.1em;
+}
+.ticket-price {
+    color: #555;
+    font-size: 0.9em;
+}
+
+/* =================================
+   STILOVI ZA KORISNIČKI PROFIL I LISTU KARATA
+==================================== */
+.ticket {
+    background-color: #fdfdfd;
+    border: 1px solid #ddd;
+    border-left: 5px solid #007bff; /* Plava linija sa strane za naglasak */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.ticket-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.ticket-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.4em;
+}
+
+.ticket-details {
+    line-height: 1.6;
+    color: #555;
+}
+
+.ticket-details strong {
+    color: #333;
+}
+
+
+/* =================================
+   FORME I GUMBI (POBOLJŠANA VERZIJA)
+==================================== */
+.form-group {
+    margin-bottom: 1.2rem; /* Malo veći razmak */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #555;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px; /* Malo veći padding */
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem; /* Usklađuje veličinu fonta */
+}
+
+/* Mijenja boju obruba kada je polje u fokusu */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+button[type="submit"] {
+    padding: 12px 20px; /* Malo veći gumb */
+    font-size: 1.1em;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out; /* Glatka tranzicija */
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
