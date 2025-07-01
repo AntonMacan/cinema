@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\Proiezione;
+use \App\Models\Film;
+use \App\Models\Recensione;
 
 class HomeController extends BaseController
 {
@@ -32,27 +34,35 @@ class HomeController extends BaseController
      */
     public function showFilm($id)
     {
-        $filmModel = new \App\Models\Film();
-        $proiezioneModel = new \App\Models\Proiezione();
+        $filmModel = new Film();
+        $proiezioneModel = new Proiezione();
+        $recensioneModel = new Recensione();
         $today = date('Y-m-d');
 
-        // Trova il film specifico
         $film = $filmModel->find($id);
-
-        // Se il film non viene trovato, mostra un errore 404
         if (!$film) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
+        $recensioni = $recensioneModel->where('film_id', $id)->orderBy('created_at', 'DESC')->findAll();
+
+        // Računanje prosječne ocjene (ostaje isto)
+        $totaleRecensioni = count($recensioni);
+        $votoMedio = 0;
+        if ($totaleRecensioni > 0) {
+            $sommaVoti = 0;
+            foreach ($recensioni as $recensione) {
+                $sommaVoti += $recensione->voto;
+            }
+            $votoMedio = round($sommaVoti / $totaleRecensioni, 1);
+        }
+
         $data = [
             'film' => $film,
-            // Trova tutte le proiezioni future per QUESTO film
-            'proiezioni' => $proiezioneModel
-                ->where('film_id', $id)
-                ->where('data >=', $today)
-                ->orderBy('data', 'ASC')
-                ->orderBy('orario', 'ASC')
-                ->findAll(),
+            'proiezioni' => $proiezioneModel->where('film_id', $id)->where('data >=', $today)->orderBy('data', 'ASC')->orderBy('orario', 'ASC')->findAll(),
+            'recensioni' => $recensioni,
+            'votoMedio' => $votoMedio,
+            'totaleRecensioni' => $totaleRecensioni,
         ];
 
         return view('film_details', $data);

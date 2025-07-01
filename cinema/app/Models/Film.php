@@ -35,4 +35,12 @@ class Film extends Model
     {
         return $this->hasMany(Proiezione::class, 'film_id');
     }
+
+    /**
+     * Relazione: Un film può avere molte recensioni.
+     */
+    public function recensioni()
+    {
+        return $this->hasMany(Recensione::class, 'film_id');
+    }
 }

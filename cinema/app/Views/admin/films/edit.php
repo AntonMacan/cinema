@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <title>Modifica Film</title>
-</head>
-<body>
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+Modifica Film
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <h1>Modifica Film: <?= esc($film->titolo) ?></h1>
 
@@ -42,5 +41,4 @@
     <br>
     <a href="/admin/films">Annulla</a>
 </div>
-</body>
-</html>
+<?= $this->endSection() ?>

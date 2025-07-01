@@ -107,8 +107,8 @@ public function register()
                     ];
                     session()->set($sessionData);
 
-                    // Reindirizza a una pagina protetta (dashboard)
-                    return redirect()->to('/dashboard')->with('success', 'Login effettuato con successo!');
+                    // Reindirizza alla pagina principale
+                    return redirect()->to('/')->with('success', 'Login effettuato con successo!');
 
                 } else {
                     // Se l'utente non esiste o la password è sbagliata

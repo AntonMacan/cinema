@@ -1,24 +1,8 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Login Utente</title>
-    <style>
-        body { font-family: sans-serif; }
-        .container { max-width: 500px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; }
-        input[type="email"], input[type="password"] {
-            width: 100%; padding: 8px; box-sizing: border-box;
-        }
-        .alert { padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; }
-        .alert-success { color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6; }
-        .alert-danger { color: #a94442; background-color: #f2dede; border-color: #ebccd1; }
-        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; }
-    </style>
-</head>
-<body>
-
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+Login Utente
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <h2>Login</h2>
 
@@ -51,6 +35,4 @@
         </div>
     </form>
 </div>
-
-</body>
-</html>
+<?= $this->endSection() ?>

@@ -57,4 +57,12 @@ class Utente extends Model
     {
         return $this->hasMany(Biglietto::class, 'cliente_id');
     }
+
+    /**
+     * Relazione: Un utente può scrivere molte recensioni.
+     */
+    public function recensioni()
+    {
+        return $this->hasMany(Recensione::class, 'utente_id');
+    }
 }

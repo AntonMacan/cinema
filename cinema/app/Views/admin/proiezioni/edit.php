@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <title>Modifica Proiezione</title>
-</head>
-<body>
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+Modifica Proiezione
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <h1>Modifica Proiezione</h1>
 
@@ -59,7 +58,6 @@
     <a href="/admin/proiezioni">Annulla</a>
 
     <script>
-    // Mali JS za poboljšanje iskustva: kada se odabere film, onemogući odabir predstave i obrnuto.
     const filmSelect = document.getElementById('film_select');
     const spettacoloSelect = document.getElementById('spettacolo_select');
 
@@ -82,5 +80,4 @@
     });
 </script>
 </div>
-</body>
-</html>
+<?= $this->endSection() ?>

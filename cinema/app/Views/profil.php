@@ -1,21 +1,9 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Il Mio Profilo - I Miei Biglietti</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f4f4f4; }
-        .container { max-width: 900px; margin: 30px auto; padding: 20px; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1, h2 { color: #333; }
-        .ticket { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
-        .ticket-header h3 { margin: 0; }
-        .ticket-details { margin-top: 10px; }
-    </style>
-</head>
-<body>
-
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+I miei biglietti
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
-    <a href="/dashboard">&laquo; Torna alla Dashboard</a>
     <h1>Il Mio Profilo</h1>
     <h2>I Miei Biglietti Acquistati</h2>
 
@@ -49,6 +37,4 @@
         <p>Non hai ancora acquistato nessun biglietto.</p>
     <?php endif; ?>
 </div>
-
-</body>
-</html>
+<?= $this->endSection() ?>

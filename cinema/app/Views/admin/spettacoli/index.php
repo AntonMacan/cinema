@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <title>Amministrazione Spettacoli</title>
-</head>
-<body>
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+Spettacoli
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <h1>Lista degli Spettacoli</h1>
-    <a href="/admin/spettacoli/new" style="margin-bottom: 20px; display: inline-block;">+ Aggiungi Nuovo Spettacolo</a>
+    <a href="/admin/spettacoli/new">+ Aggiungi Nuovo Spettacolo</a>
 
     <?php if (session()->get('success')): ?>
         <div class="alert alert-success"><?= session()->get('success') ?></div>
@@ -28,9 +27,9 @@
                         <td><?= esc($spettacolo->titolo) ?></td>
                         <td>
                             <a href="/admin/spettacoli/edit/<?= $spettacolo->id ?>">Modifica</a> |
-                            <form action="/admin/spettacoli/delete/<?= $spettacolo->id ?>" method="post" style="display:inline;">
+                            <form action="/admin/spettacoli/delete/<?= $spettacolo->id ?>" method="post" >
                                 <?= csrf_field() ?>
-                                <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo spettacolo?');" style="color:red; border:none; background:none; cursor:pointer;">
+                                <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo spettacolo?');" >
                                     Elimina
                                 </button>
                             </form>
@@ -44,8 +43,5 @@
             <?php endif; ?>
         </tbody>
     </table>
-    <br>
-    <a href="/dashboard">Torna alla Dashboard</a>
 </div>
-</body>
-</html>
+<?= $this->endSection() ?>

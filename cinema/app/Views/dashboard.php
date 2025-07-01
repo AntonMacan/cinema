@@ -3,11 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
-    <style>
-        body { font-family: sans-serif; }
-        .container { max-width: 800px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
-        .logout-link { display: inline-block; margin-top: 20px; color: red; }
-    </style>
 </head>
 <body>
 

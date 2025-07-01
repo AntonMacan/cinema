@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <title>Modifica Spettacolo</title>
-</head>
-<body>
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+Modifica spettacolo
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <h1>Modifica Spettacolo: <?= esc($spettacolo->titolo) ?></h1>
 
@@ -39,5 +38,4 @@
     <br>
     <a href="/admin/spettacoli">Annulla</a>
 </div>
-</body>
-</html>
+<?= $this->endSection() ?>

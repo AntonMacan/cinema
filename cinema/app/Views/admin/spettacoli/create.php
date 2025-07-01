@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <title>Aggiungi Nuovo Spettacolo</title>
-</head>
-<body>
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+Nuovo Spettacolo
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <h1>Aggiungi Nuovo Spettacolo</h1>
 
@@ -47,5 +46,4 @@
     <br>
     <a href="/admin/spettacoli">Annulla</a>
 </div>
-</body>
-</html>
+<?= $this->endSection() ?>

@@ -1,20 +1,8 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title><?= esc($spettacolo->titolo) ?></title>
-    <style>
-        body { font-family: sans-serif; background-color: #f4f4f4; }
-        .container { max-width: 900px; margin: 30px auto; padding: 20px; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1, h2, h3 { color: #333; }
-        .descrizione { margin-top: 20px; line-height: 1.6; }
-        .termini-list { list-style: none; padding: 0; margin-top: 20px; }
-        .termini-list li { padding: 10px; border-bottom: 1px solid #eee; }
-        .termini-list a { font-weight: bold; }
-    </style>
-</head>
-<body>
-
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+<?= esc($spettacolo->titolo) ?>
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <a href="/">&laquo; Torna al repertorio</a>
 
@@ -44,6 +32,4 @@
     <?php endif; ?>
 
 </div>
-
-</body>
-</html>
+<?= $this->endSection() ?>

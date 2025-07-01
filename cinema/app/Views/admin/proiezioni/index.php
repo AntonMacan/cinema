@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <title>Amministrazione Proiezioni</title>
-</head>
-<body>
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+Proiezioni
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <h1>Lista delle Proiezioni</h1>
-    <a href="/admin/proiezioni/new" style="margin-bottom: 20px; display: inline-block;">+ Aggiungi Nuova Proiezione</a>
+    <a href="/admin/proiezioni/new" >+ Aggiungi Nuova Proiezione</a>
 
     <?php if (session()->get('success')): ?>
         <div class="alert alert-success"><?= session()->get('success') ?></div>
@@ -51,9 +50,9 @@
                 </td>
                 <td>
                     <a href="/admin/proiezioni/edit/<?= $proiezione->id ?>">Modifica</a>
-                    <form action="/admin/proiezioni/delete/<?= $proiezione->id ?>" method="post" style="display:inline;">
+                    <form action="/admin/proiezioni/delete/<?= $proiezione->id ?>" method="post" >
                         <?= csrf_field() ?>
-                        <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questa proiezione?');" style="color:red; border:none; background:none; cursor:pointer;">
+                        <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questa proiezione?');">
                             Elimina
                         </button>
                     </form>
@@ -67,8 +66,5 @@
     <?php endif; ?>
 </tbody>
     </table>
-    <br>
-    <a href="/dashboard">Torna alla Dashboard</a>
 </div>
-</body>
-</html>
+<?= $this->endSection() ?>

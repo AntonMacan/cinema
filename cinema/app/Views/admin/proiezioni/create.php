@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <title>Aggiungi Nuova Proiezione</title>
-</head>
-<body>
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+Nuova Proiezione
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <h1>Aggiungi Nuova Proiezione</h1>
 
@@ -57,7 +56,6 @@
 </div>
 
 <script>
-    // Mali JS za poboljšanje iskustva: kada se odabere film, onemogući odabir predstave i obrnuto.
     const filmSelect = document.getElementById('film_select');
     const spettacoloSelect = document.getElementById('spettacolo_select');
 
@@ -79,6 +77,4 @@
         }
     });
 </script>
-
-</body>
-</html>
+<?= $this->endSection() ?>

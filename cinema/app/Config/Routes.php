@@ -40,3 +40,4 @@ $routes->post('booking/process', 'BookingController::process');
 $routes->get('booking/success/(:num)', 'BookingController::success/$1');
 $routes->get('booking/pdf/(:num)', 'BookingController::generatePdf/$1');
 $routes->get('verify/(:segment)', 'UtenteController::verify/$1');
+$routes->post('recensioni/create', 'RecensioneController::create', ['filter' => 'auth']);

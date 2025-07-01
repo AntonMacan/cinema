@@ -1,21 +1,8 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Prenotazione Biglietti</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f4f4f4; }
-        .container { max-width: 700px; margin: 30px auto; padding: 20px; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1, h2, h3 { color: #333; }
-        .proiezione-info { background-color: #eee; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
-        .form-group { margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        label { font-size: 1.1em; }
-        input[type="number"] { width: 80px; padding: 5px; }
-        button { padding: 10px 20px; font-size: 1.1em; background-color: #28a745; color: white; border: none; cursor: pointer; border-radius: 5px; }
-    </style>
-</head>
-<body>
-
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+Prenotazione biglietti
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <a href="/">&laquo; Torna al repertorio</a>
 
@@ -48,12 +35,10 @@
             </div>
          <?php endforeach; ?>
 
-         <div class="form-group" style="justify-content: flex-end; margin-top: 30px;">
+         <div class="form-group">
             <button type="submit">Continua</button>
          </div>
     </form>
 
 </div>
-
-</body>
-</html>
+<?= $this->endSection() ?>

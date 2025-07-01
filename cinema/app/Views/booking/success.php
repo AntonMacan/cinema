@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Acquisto Completato</title>
-    </head>
-<body>
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+Grazie!
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <h1>Grazie per il tuo acquisto!</h1>
     
@@ -33,11 +31,10 @@
     <?php endif; ?>
 
     <br>
-    <a href="/booking/pdf/<?= $pagamento->id ?>" target="_blank" style="padding: 10px 20px; background-color: #17a2b8; color: white; text-decoration: none; border-radius: 5px;">
+    <a href="/booking/pdf/<?= $pagamento->id ?>" target="_blank" >
         Scarica i biglietti
     </a>
     <br><br>
     <a href="/">Torna alla homepage</a>
 </div>
-</body>
-</html>
+<?= $this->endSection() ?>

@@ -1,27 +1,13 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Registrazione Nuovo Utente</title>
-    <style>
-        body { font-family: sans-serif; }
-        .container { max-width: 500px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; }
-        input[type="text"], input[type="email"], input[type="password"], input[type="date"] {
-            width: 100%; padding: 8px; box-sizing: border-box;
-        }
-        .error { color: red; font-size: 0.9em; }
-        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; }
-    </style>
-</head>
-<body>
-
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+Registrazione
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <h2>Registrazione</h2>
 
     <?php if (isset($validation)): ?>
-        <div class="error" style="border: 1px solid red; padding: 10px; margin-bottom: 15px; background-color: #ffecec;">
+        <div class="error">
             <strong>Error:</strong>
             <ul>
                 <?php foreach ($validation->getErrors() as $error): ?>
@@ -67,6 +53,4 @@
         </div>
     </form>
 </div>
-
-</body>
-</html>
+<?= $this->endSection() ?>

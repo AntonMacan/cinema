@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <title>Amministrazione Film</title>
-    </head>
-<body>
+<?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('title') ?>
+Film
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 <div class="container">
     <h1>Lista dei Film</h1>
-    <a href="/admin/films/new" style="margin-bottom: 20px; display: inline-block;">+ Aggiungi Nuovo Film</a>
+    <a href="/admin/films/new" >+ Aggiungi Nuovo Film</a>
 
     <?php if (session()->get('success')): ?>
         <div class="alert alert-success"><?= session()->get('success') ?></div>
@@ -28,9 +27,9 @@
                         <td><?= esc($film->titolo) ?></td>
                         <td>
                             <a href="/admin/films/edit/<?= $film->id ?>">Modifica</a> |
-                            <form action="/admin/films/delete/<?= $film->id ?>" method="post" style="display:inline;">
+                            <form action="/admin/films/delete/<?= $film->id ?>" method="post" >
                                 <?= csrf_field() ?>
-                                <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo film?');" style="color:red; border:none; background:none; cursor:pointer;">
+                                <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo film?');">
                                     Elimina
                                 </button>
                             </form>
@@ -44,8 +43,5 @@
             <?php endif; ?>
         </tbody>
     </table>
-    <br>
-    <a href="/dashboard">Torna alla Dashboard</a>
 </div>
-</body>
-</html>
+<?= $this->endSection() ?>
