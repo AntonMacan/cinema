@@ -14,8 +14,10 @@
 <div class="container">
     <h1>Benvenuto, <?= esc(session()->get('nome')) ?>!</h1>
     <p>Questa è la tua dashboard personale. Sei loggato con successo.</p>
-    <p>Il tuo ruolo è: <strong><?= esc(session()->get('ruolo')) ?></strong></p>
 
+    <hr>
+    <a href="/myprofile">Vedi i Miei Biglietti</a>
+    <hr>
     <a href="/logout" class="logout-link">Logout (Odjava)</a>
 </div>
 

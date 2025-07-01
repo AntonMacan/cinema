@@ -33,6 +33,10 @@
     <?php endif; ?>
 
     <br>
+    <a href="/booking/pdf/<?= $pagamento->id ?>" target="_blank" style="padding: 10px 20px; background-color: #17a2b8; color: white; text-decoration: none; border-radius: 5px;">
+        Scarica i biglietti
+    </a>
+    <br><br>
     <a href="/">Torna alla homepage</a>
 </div>
 </body>

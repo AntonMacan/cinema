@@ -3,6 +3,9 @@
 namespace App\Controllers;
 
 use App\Models\Proiezione;
+use App\Models\Pagamento;
+use App\Models\Biglietto;
+use Dompdf\Dompdf;
 
 class BookingController extends BaseController
 {
@@ -131,5 +134,32 @@ class BookingController extends BaseController
         }
 
         return view('booking/success', $data);
+    }
+
+    /**
+     * Genera un PDF di conferma per un dato pagamento.
+     * @param int $pagamentoId ID del pagamento
+     */
+    public function generatePdf($pagamentoId)
+    {
+        $pagamentoModel = new Pagamento();
+        $bigliettoModel = new Biglietto();
+        $data = [
+            'pagamento' => $pagamentoModel->find($pagamentoId),
+            'biglietti' => $bigliettoModel->where('pagamento_id', $pagamentoId)->findAll()
+        ];
+
+        if (!empty($data['biglietti'])) {
+            $proiezioneModel = new Proiezione();
+            $data['proiezione'] = $proiezioneModel->find($data['biglietti'][0]->proiezione_id);
+        }
+
+        $html = view('booking/pdf_template', $data);
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+        $dompdf->stream("biglietti.pdf");
     }
 }

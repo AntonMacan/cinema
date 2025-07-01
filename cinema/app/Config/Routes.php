@@ -9,6 +9,7 @@ $routes->get('/', 'HomeController::index');
 $routes->match(['GET', 'POST'], '/register', 'UtenteController::register');
 $routes->match(['GET', 'POST'], 'login', 'UtenteController::login');
 $routes->get('dashboard', 'DashboardController::index', ['filter' => 'auth']);
+$routes->get('myprofile', 'UtenteController::profil', ['filter' => 'auth']);
 $routes->get('logout', 'UtenteController::logout');
 $routes->group('admin', ['filter' => 'auth:gestore'], static function ($routes) {
     $routes->get('films', 'Admin\FilmController::index');
@@ -37,3 +38,4 @@ $routes->get('spettacolo/(:num)', 'HomeController::showSpettacolo/$1');
 $routes->get('reservation/(:num)', 'BookingController::index/$1');
 $routes->post('booking/process', 'BookingController::process');
 $routes->get('booking/success/(:num)', 'BookingController::success/$1');
+$routes->get('booking/pdf/(:num)', 'BookingController::generatePdf/$1');

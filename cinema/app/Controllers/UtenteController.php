@@ -136,4 +136,25 @@ class UtenteController extends BaseController
         // Reindirizza alla pagina di login con un messaggio
         return redirect()->to('/login')->with('success', 'Sei stato disconnesso con successo.');
     }
+
+    /**
+     * Mostra la pagina del profilo dell'utente con la cronologia dei biglietti.
+     */
+    public function profil()
+    {
+        $bigliettoModel = new \App\Models\Biglietto();
+
+        // Ottieni l'ID dell'utente loggato dalla sessione
+        $userId = session()->get('user_id');
+
+        $data = [
+            // Trova tutti i biglietti che appartengono a questo utente
+            'biglietti' => $bigliettoModel
+                            ->where('cliente_id', $userId)
+                            ->findAll()
+        ];
+
+        // Carica la vista del profilo e passa i dati
+        return view('profil', $data);
+    }
 }

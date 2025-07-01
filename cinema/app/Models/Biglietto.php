@@ -16,14 +16,22 @@ class Biglietto extends Model
     
     protected $table            = 'biglietti';
     protected $returnType       = 'App\Models\Biglietto';
-    protected $primaryKey       = 'id';
+    protected $primaryKey       = 'id';   
     protected $allowedFields    = ['cliente_id', 'proiezione_id', 'tipo', 'prezzo', 'pagamento_id', 'created_at'];
-
+    
     protected $useTimestamps    = false;
 
     public function proiezione()
     {
-        return $this->belongsTo(Proiezione::class, 'proiezione_id');
+        return $this->getProiezione(); // Koristimo našu ručnu metodu
+    }
+
+    public function getProiezione()
+    {
+        if (empty($this->proiezione_id)) {
+            return null;
+        }
+        return (new Proiezione())->find($this->proiezione_id);
     }
 
     public function cliente()
