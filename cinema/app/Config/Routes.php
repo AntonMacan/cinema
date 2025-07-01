@@ -39,3 +39,4 @@ $routes->get('reservation/(:num)', 'BookingController::index/$1');
 $routes->post('booking/process', 'BookingController::process');
 $routes->get('booking/success/(:num)', 'BookingController::success/$1');
 $routes->get('booking/pdf/(:num)', 'BookingController::generatePdf/$1');
+$routes->get('verify/(:segment)', 'UtenteController::verify/$1');

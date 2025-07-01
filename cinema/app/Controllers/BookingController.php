@@ -108,6 +108,40 @@ class BookingController extends BaseController
         $bigliettoModel = new \App\Models\Biglietto();
         $bigliettoModel->insertBatch($bigliettiDaSalvare); // Salva tutti i biglietti in una sola query
 
+        $email = \Config\Services::email();
+
+        $email->setTo(session()->get('email'));
+
+        $email->setFrom('info@cinema-teatro.com', 'Cinema-Teatro');
+
+        $email->setSubject('Conferma di Prenotazione - Cinema-Teatro');
+
+        $proiezione = (new Proiezione())->find($proiezioneId);
+        $contenuto = $proiezione->getFilm() ?? $proiezione->spettacolo;
+
+        $message = "<h1>Grazie per il tuo acquisto!</h1>";
+        $message .= "<p>Ciao " . session()->get('nome') . ", la tua prenotazione è stata confermata con successo.</p>";
+        $message .= "<h2>Dettagli della Proiezione:</h2>";
+        $message .= "<ul>";
+        $message .= "<li><strong>Contenuto:</strong> " . esc($contenuto->titolo) . "</li>";
+        $message .= "<li><strong>Data:</strong> " . date('d.m.Y', strtotime($proiezione->data)) . "</li>";
+        $message .= "<li><strong>Orario:</strong> " . date('H:i', strtotime($proiezione->orario)) . "h</li>";
+        $message .= "</ul>";
+        $message .= "<h2>Biglietti Acquistati (Totale: " . number_format($importoTotale, 2) . " €):</h2><ul>";
+        foreach ($bigliettiDaSalvare as $biglietto) {
+            $message .= "<li>Biglietto " . $biglietto['tipo'] . " (" . number_format($biglietto['prezzo'], 2) . " €)</li>";
+        }
+        $message .= "</ul><p>Mostra questo email alla cassa.</p>";
+
+        $email->setMessage($message);
+
+        if (!$email->send(false)) {
+            // U slučaju greške, zapiši je u log za kasnije, ali ne prikazuj korisniku
+            log_message('error', $email->printDebugger(['headers']));
+        }
+
+
+
         // 5. Reindirizza alla pagina di successo
         return redirect()->to("/booking/success/{$pagamentoId}");
     }

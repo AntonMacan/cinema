@@ -14,6 +14,8 @@ class Utente extends Model
     public $codice_fiscale;
     public $data_nascita;
     public $ruolo;
+    public $status;
+    public $verification_token;
     public $created_at;
     public $updated_at;
 
@@ -22,7 +24,7 @@ class Utente extends Model
     protected $primaryKey       = 'id';
     
     protected $allowedFields    = [
-        'nome', 'email', 'password', 'codice_fiscale', 'data_nascita', 'ruolo'
+        'nome', 'email', 'password', 'codice_fiscale', 'data_nascita', 'ruolo','status', 'verification_token'
     ];
 
     protected $useTimestamps    = true;

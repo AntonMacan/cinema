@@ -7,13 +7,12 @@ use App\Models\Utente;
 class UtenteController extends BaseController
 {
     /**
-     * Gestisce la registrazione di un nuovo utente.
-     * Mostra il form (GET) e processa i dati inviati (POST).
-     */
-    public function register()
-    {
-        // Carica gli helper necessari per i form e gli URL
-        helper(['form', 'url']);
+ * Gestisce la registrazione di un nuovo utente.
+ * Salva l'utente come inattivo e invia un'email di verifica.
+ */
+public function register()
+{
+    helper(['form', 'url', 'text']); // Dodajemo 'text' helper za random string
 
         // Definisce le regole di validazione per i dati del form
         $rules = [
@@ -25,46 +24,45 @@ class UtenteController extends BaseController
             'data_nascita'   => 'required|valid_date'
         ];
 
-        // Controlla se la richiesta è di tipo POST (cioè se il form è stato inviato)
-        if ($this->request->is('POST')) {
-            
-            // Esegue la validazione basata sulle regole definite sopra
-            if ($this->validate($rules)) {
-                
-                // --- SE LA VALIDAZIONE HA SUCCESSO ---
+    if ($this->request->is('POST') && $this->validate($rules)) {
+        $userModel = new \App\Models\Utente();
 
-                // Crea una nuova istanza del modello Utente
-                $userModel = new \App\Models\Utente();
+        // Genera un token di verifica unico e casuale
+        $token = random_string('crypto', 50);
 
-                // Prepara l'array di dati da salvare nel database
-                $data = [
-                    'nome'           => $this->request->getPost('nome'),
-                    'email'          => $this->request->getPost('email'),
-                    'password'       => $this->request->getPost('password'),
-                    'codice_fiscale' => $this->request->getPost('codice_fiscale'),
-                    'data_nascita'   => $this->request->getPost('data_nascita'),
-                    'ruolo'          => 'cliente' // Ogni nuovo utente registrato è un 'cliente' di default
-                ];
+        $data = [
+            'nome'           => $this->request->getPost('nome'),
+            'email'          => $this->request->getPost('email'),
+            'password'       => $this->request->getPost('password'),
+            'codice_fiscale' => $this->request->getPost('codice_fiscale'),
+            'data_nascita'   => $this->request->getPost('data_nascita'),
+            'ruolo'          => 'cliente',
+            'status'         => 'inactive', // L'account è inattivo
+            'verification_token' => $token // Salviamo il token
+        ];
 
-                // Salva i dati del nuovo utente nel database
-                $userModel->save($data);
+        $userModel->save($data);
 
-                // Reindirizza alla pagina di login con un messaggio di successo nella sessione
-                return redirect()->to('/login')->with('success', 'Registrazione completata! Ora puoi effettuare il login.');
+        // Invia l'email di verifica
+        $email = \Config\Services::email();
+        $email->setTo($data['email']);
+        $email->setFrom('info@cinema-teatro.com', 'Cinema-Teatro');
+        $email->setSubject('Attiva il tuo account');
 
-            } else {
-                // --- SE LA VALIDAZIONE FALLISCE ---
+        $verificationLink = site_url('verify/' . $token);
+        $message = "<h1>Benvenuto in Cinema-Teatro!</h1>";
+        $message .= "<p>Grazie per esserti registrato. Per favore, clicca sul link sottostante per attivare il tuo account:</p>";
+        $message .= "<a href='{$verificationLink}'>Attiva il mio account</a>";
+        $email->setMessage($message);
+        $email->send();
 
-                // Passa i dati di validazione (con gli errori) di nuovo alla vista
-                $data['validation'] = $this->validator;
-                return view('register', $data);
-            }
-        } 
-        
-        // Se la richiesta è di tipo GET (primo caricamento della pagina), mostra semplicemente la vista
-        return view('register');
+        // Mostra una pagina di avviso all'utente
+        return view('activation_message');
+    } else {
+        $data['validation'] = $this->validator;
+        return view('register', $data);
     }
-
+}
 
     /**
      * Metodo per il login degli utenti esistenti.
@@ -93,6 +91,9 @@ class UtenteController extends BaseController
                 // Trova l'utente tramite email
                 $user = $model->where('email', $email)->first();
 
+                if ($user && $user->status !== 'active') {
+                    return redirect()->back()->withInput()->with('error', 'Il tuo account non è stato ancora attivato. Controlla la tua email per il link di attivazione.');
+                }
                 // Controlla se l'utente esiste e se la password è corretta
                 if ($user && password_verify($password, $user->password)) {
                     
@@ -156,5 +157,32 @@ class UtenteController extends BaseController
 
         // Carica la vista del profilo e passa i dati
         return view('profil', $data);
+    }
+
+    /**
+     * Verifica l'account di un utente tramite il token inviato via email.
+     * @param string $token
+     */
+    public function verify($token)
+    {
+        $userModel = new Utente();
+
+        // Trova l'utente con il token specificato
+        $user = $userModel->where('verification_token', $token)->first();
+
+        if ($user) {
+            // Se l'utente viene trovato, aggiorna il suo stato ad 'attivo'
+            $data = [
+                'status' => 'active',
+                'verification_token' => null // Pulisci il token
+            ];
+            $userModel->update($user->id, $data);
+
+            // Reindirizza alla pagina di login con un messaggio di successo
+            return redirect()->to('/login')->with('success', 'Il tuo account è stato attivato con successo! Ora puoi effettuare il login.');
+        } else {
+            // Se il token non è valido, mostra un messaggio di errore
+            return redirect()->to('/login')->with('error', 'Token di verifica non valido o scaduto.');
+        }
     }
 }
