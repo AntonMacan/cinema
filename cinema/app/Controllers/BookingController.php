@@ -41,110 +41,101 @@ class BookingController extends BaseController
         return view('booking/start', $data);
     }
 
-    /**
-     * Processa la selezione dei biglietti, crea il pagamento e salva i biglietti.
-     */
-    public function process()
-    {
-        // 1. Controlla se l'utente è loggato
-        if (!session()->get('isLoggedIn')) {
-            // Salva l'URL a cui l'utente voleva andare
-            session()->set('redirect_url', previous_url());
-            return redirect()->to('/login')->with('error', 'Devi effettuare il login per acquistare i biglietti.');
-        }
+/**
+ * Processa la selezione dei biglietti, crea il pagamento, salva i biglietti,
+ * e invia un'email di conferma con il PDF in allegato.
+ */
+public function process()
+{
+    // 1. Controlla se l'utente è loggato (ostaje isto)
+    if (!session()->get('isLoggedIn')) {
+        session()->set('redirect_url', previous_url());
+        return redirect()->to('/login')->with('error', 'Devi effettuare il login per acquistare i biglietti.');
+    }
 
-        // Recupera i dati dal form
-        $proiezioneId = $this->request->getPost('proiezione_id');
-        $bigliettiSelezionati = $this->request->getPost('biglietti');
+    // Recupera i dati dal form (ostaje isto)
+    $proiezioneId = $this->request->getPost('proiezione_id');
+    $bigliettiSelezionati = $this->request->getPost('biglietti');
+    $tipi_biglietti_info = [
+        'intero' => ['tipo' => 'Intero', 'prezzo' => 10.00],
+        'ridotto' => ['tipo' => 'Ridotto', 'prezzo' => 7.50]
+    ];
 
-        // Definiamo di nuovo i tipi di biglietti e i loro prezzi
-        $tipi_biglietti_info = [
-            'intero' => ['tipo' => 'Intero', 'prezzo' => 10.00],
-            'ridotto' => ['tipo' => 'Ridotto', 'prezzo' => 7.50]
-        ];
+    $bigliettiDaSalvare = [];
+    $importoTotale = 0.00;
 
-        $bigliettiDaSalvare = [];
-        $importoTotale = 0.00;
-        
-        // 2. Calcola il prezzo totale e prepara i dati per ogni biglietto
-        foreach ($bigliettiSelezionati as $key => $quantita) {
-            if ($quantita > 0) {
-                for ($i = 0; $i < $quantita; $i++) {
-                    $prezzo = $tipi_biglietti_info[$key]['prezzo'];
-                    $importoTotale += $prezzo;
-                    
-                    $bigliettiDaSalvare[] = [
-                        'cliente_id'    => session()->get('user_id'),
-                        'proiezione_id' => $proiezioneId,
-                        'tipo'          => $tipi_biglietti_info[$key]['tipo'],
-                        'prezzo'        => $prezzo,
-                        'created_at'    => date('Y-m-d H:i:s')
-                    ];
-                }
+    // Calcola il prezzo totale e prepara i dati per ogni biglietto
+    foreach ($bigliettiSelezionati as $key => $quantita) {
+        // Provjera da je količina ispravan broj i veći od 0
+        if (is_numeric($quantita) && $quantita > 0) {
+
+            // For petlja koja osigurava da se cijena samo zbraja, bez množenja
+            for ($i = 0; $i < $quantita; $i++) {
+                $prezzo = $tipi_biglietti_info[$key]['prezzo'];
+                $importoTotale += $prezzo;
+
+                $bigliettiDaSalvare[] = [
+                    'cliente_id'    => session()->get('user_id'),
+                    'proiezione_id' => $proiezioneId,
+                    'tipo'          => $tipi_biglietti_info[$key]['tipo'],
+                    'prezzo'        => $prezzo,
+                    'created_at'    => date('Y-m-d H:i:s')
+                ];
             }
         }
-
-        // Se non è stato selezionato nessun biglietto, torna indietro
-        if (empty($bigliettiDaSalvare)) {
-            return redirect()->back()->with('error', 'Devi selezionare almeno un biglietto.');
-        }
-
-        // 3. Crea il record di pagamento
-        $pagamentoModel = new \App\Models\Pagamento();
-        $pagamentoData = [
-            'cliente_id'       => session()->get('user_id'),
-            'importo'          => $importoTotale,
-            'metodo_pagamento' => 'PayPal',
-            'stato_transazione'=> 'completato'
-        ];
-        $pagamentoModel->save($pagamentoData);
-        $pagamentoId = $pagamentoModel->getInsertID(); // Ottieni l'ID del pagamento appena creato
-
-        // 4. Aggiungi l'ID del pagamento a ogni biglietto e salvali
-        foreach ($bigliettiDaSalvare as &$biglietto) {
-            $biglietto['pagamento_id'] = $pagamentoId;
-        }
-
-        $bigliettoModel = new \App\Models\Biglietto();
-        $bigliettoModel->insertBatch($bigliettiDaSalvare); // Salva tutti i biglietti in una sola query
-
-        $email = \Config\Services::email();
-
-        $email->setTo(session()->get('email'));
-
-        $email->setFrom('info@cinema-teatro.com', 'Cinema-Teatro');
-
-        $email->setSubject('Conferma di Prenotazione - Cinema-Teatro');
-
-        $proiezione = (new Proiezione())->find($proiezioneId);
-        $contenuto = $proiezione->getFilm() ?? $proiezione->spettacolo;
-
-        $message = "<h1>Grazie per il tuo acquisto!</h1>";
-        $message .= "<p>Ciao " . session()->get('nome') . ", la tua prenotazione è stata confermata con successo.</p>";
-        $message .= "<h2>Dettagli della Proiezione:</h2>";
-        $message .= "<ul>";
-        $message .= "<li><strong>Contenuto:</strong> " . esc($contenuto->titolo) . "</li>";
-        $message .= "<li><strong>Data:</strong> " . date('d.m.Y', strtotime($proiezione->data)) . "</li>";
-        $message .= "<li><strong>Orario:</strong> " . date('H:i', strtotime($proiezione->orario)) . "h</li>";
-        $message .= "</ul>";
-        $message .= "<h2>Biglietti Acquistati (Totale: " . number_format($importoTotale, 2) . " €):</h2><ul>";
-        foreach ($bigliettiDaSalvare as $biglietto) {
-            $message .= "<li>Biglietto " . $biglietto['tipo'] . " (" . number_format($biglietto['prezzo'], 2) . " €)</li>";
-        }
-        $message .= "</ul><p>Mostra questo email alla cassa.</p>";
-
-        $email->setMessage($message);
-
-        if (!$email->send(false)) {
-            // U slučaju greške, zapiši je u log za kasnije, ali ne prikazuj korisniku
-            log_message('error', $email->printDebugger(['headers']));
-        }
-
-
-
-        // 5. Reindirizza alla pagina di successo
-        return redirect()->to("/booking/success/{$pagamentoId}");
     }
+
+    if (empty($bigliettiDaSalvare)) {
+        return redirect()->back()->with('error', 'Devi selezionare almeno un biglietto.');
+    }
+
+    // 3. Crea il record di pagamento (ostaje isto)
+    $pagamentoModel = new Pagamento();
+    $pagamentoData = [
+        'cliente_id' => session()->get('user_id'),
+        'importo' => $importoTotale,
+        'metodo_pagamento' => 'Online (Simulato)',
+        'stato_transazione' => 'completato'
+    ];
+    $pagamentoModel->save($pagamentoData);
+    $pagamentoId = $pagamentoModel->getInsertID();
+
+    // 4. Aggiungi l'ID del pagamento a ogni biglietto e salvali (ostaje isto)
+    foreach ($bigliettiDaSalvare as &$biglietto) {
+        $biglietto['pagamento_id'] = $pagamentoId;
+    }
+    $bigliettoModel = new Biglietto();
+    $bigliettoModel->insertBatch($bigliettiDaSalvare);
+
+    $dataPerEmail = [
+        'pagamento' => $pagamentoModel->find($pagamentoId),
+        'biglietti' => $bigliettoModel->where('pagamento_id', $pagamentoId)->findAll(),
+        'proiezione' => (new Proiezione())->find($proiezioneId)
+    ];
+
+    $pdfHtml = view('booking/pdf_template', $dataPerEmail);
+    $dompdf = new Dompdf();
+    $dompdf->loadHtml($pdfHtml);
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();
+    $pdfOutput = $dompdf->output();
+ 
+    $email = \Config\Services::email();
+    $email->setTo(session()->get('email'));
+    $email->setFrom('info@cinema-teatro.com', 'Cinema-Teatro');
+    $email->setSubject('Conferma di Prenotazione - Cinema-Teatro');
+
+    $emailMessage = view('emails/ticket_confirmation', $dataPerEmail); 
+    $email->setMessage($emailMessage);
+
+    $email->attach($pdfOutput, 'attachment', 'biglietti' . $pagamentoId . '.pdf', 'application/pdf');
+
+    if (!$email->send(false)) {
+        log_message('error', $email->printDebugger(['headers']));
+    }
+
+    return redirect()->to("/booking/success/{$pagamentoId}");
+}
 
     /**
      * Mostra la pagina di conferma dopo un acquisto andato a buon fine.
