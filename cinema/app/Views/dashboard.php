@@ -11,7 +11,7 @@
     <p>Questa è la tua dashboard personale. Sei loggato con successo.</p>
 
     <hr>
-    <a href="/myprofile">Vedi i Miei Biglietti</a>
+    <a href="/tickets">Vedi i Miei Biglietti</a>
     <hr>
     <a href="/logout" class="logout-link">Logout (Odjava)</a>
 </div>

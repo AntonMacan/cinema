@@ -15,7 +15,7 @@
                     <li><a href="/admin/proiezioni" style="color: #ffc107;">Proiezioni</a></li>
                 <?php endif; ?>
 
-                <li><a href="/myprofile" style="color: white;">I miei biglietti</a></li>
+                <li><a href="/tickets" style="color: white;">I miei biglietti</a></li>
                 <li style="color: #ccc;">
                     | <span>Benvenuto, <?= esc(session()->get('nome')) ?></span>
                 </li>

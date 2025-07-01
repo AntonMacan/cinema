@@ -105,15 +105,6 @@ select {
     border-radius: 4px;
 }
 
-button[type="submit"] {
-    padding: 10px 15px;
-    font-size: 1.1em;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-}
 button[type="submit"]:hover {
     background-color: #0056b3;
 }
@@ -426,10 +417,10 @@ button[type="submit"]:hover {
 
 
 /* =================================
-   FORME I GUMBI (POBOLJŠANA VERZIJA)
+   FORME I GUMBI (REFAKTORIRANA VERZIJA)
 ==================================== */
 .form-group {
-    margin-bottom: 1.2rem; /* Malo veći razmak */
+    margin-bottom: 1.2rem;
 }
 
 .form-group label {
@@ -448,31 +439,242 @@ input[type="number"],
 textarea,
 select {
     width: 100%;
-    padding: 10px; /* Malo veći padding */
+    padding: 10px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 1rem; /* Usklađuje veličinu fonta */
+    font-size: 1rem;
 }
 
-/* Mijenja boju obruba kada je polje u fokusu */
 input:focus, textarea:focus, select:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
 }
 
-button[type="submit"] {
-    padding: 12px 20px; /* Malo veći gumb */
+/* === KLJUČNA PROMJENA JE OVDJE === */
+
+/* Maknuli smo `button[type="submit"]` i definirali osnovni stil za SVE gumbe s klasom .btn */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
     font-size: 1.1em;
-    background-color: #007bff;
-    color: white;
-    border: none;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
     cursor: pointer;
+    border: 1px solid transparent;
     border-radius: 5px;
-    transition: background-color 0.2s ease-in-out; /* Glatka tranzicija */
+    transition: background-color 0.2s ease-in-out;
+    text-decoration: none; /* Da se primijeni i na <a> linkove */
 }
 
-button[type="submit"]:hover {
-    background-color: #0056b3;
+.btn:hover {
+    text-decoration: none; /* Uklanja podcrtavanje na linkovima */
+}
+
+/* Ostatak .btn klasa ostaje isti, one samo dodaju boje i mijenjaju veličine */
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.875rem;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+.btn-info {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+.btn-info:hover {
+    color: #fff;
+    background-color: #138496;
+    border-color: #117a8b;
+}
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+.btn-danger:hover {
+    color: #fff;
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+.ticket.ticket-expired {
+    background-color: #f1f1f1; /* Malo tamnija, isprana pozadina */
+    opacity: 0.7; /* Čini ga polu-prozirnim da izgleda neaktivno */
+    border-left-color: #aaa; /* Siva umjesto plave linije */
+}
+
+.ticket.ticket-expired h3 {
+    color: #777; /* Tamniji, manje istaknut tekst naslova */
+}
+
+/* =================================
+   STILOVI ZA PAGINACIJU
+==================================== */
+.pager-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination {
+    display: inline-flex;
+    list-style: none;
+    padding: 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.pagination li {
+    margin: 0;
+}
+
+.pagination li a {
+    display: block;
+    padding: 10px 15px;
+    color: #007bff;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    border-left-width: 0;
+    background-color: white;
+    transition: background-color 0.2s;
+}
+
+.pagination li:first-child a {
+    border-left-width: 1px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.pagination li:last-child a {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.pagination li.active a {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+    cursor: default;
+}
+
+.pagination li a:hover:not(.active) {
+    background-color: #0069d9;
+}
+
+.pagination li.disabled a {
+    color: #ccc;
+    cursor: default;
+    background-color: #f9f9f9;
+}
+
+/* =================================
+   STILOVI ZA ADMIN TABLICE I GUMBE
+==================================== */
+
+/* Generičke klase za gumbe */
+.btn {
+    display: inline-block;
+    padding: 8px 15px;
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+.btn:hover {
+    text-decoration: none;
+}
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.875rem;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+.btn-info {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+.btn-info:hover {
+    color: #fff;
+    background-color: #138496;
+    border-color: #117a8b;
+}
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+.btn-danger:hover {
+    color: #fff;
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+/* Dodatni razmak ispod gumba */
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+/* Stil za tablicu */
+.table-admin {
+    width: 100%;
+    border-collapse: collapse; /* Spaja rubove ćelija */
+    margin-top: 20px;
+}
+
+.table-admin th,
+.table-admin td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    vertical-align: middle; /* Vertikalno poravnanje */
+}
+
+.table-admin thead th {
+    background-color: #f2f2f2; /* Svijetlo siva pozadina za zaglavlje */
+    font-weight: bold;
+}
+
+.table-admin tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Zebra-pruge za lakše čitanje */
+}
+
+.table-admin tbody tr:hover {
+    background-color: #f1f1f1; /* Boja retka kada se prijeđe mišem */
+}
+
+/* Stil za grupu akcija */
+.actions-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Razmak između gumba */
+}
+.actions-group form {
+    margin: 0;
 }

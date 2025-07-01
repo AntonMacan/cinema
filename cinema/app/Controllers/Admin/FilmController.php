@@ -13,13 +13,20 @@ class FilmController extends BaseController
      * Mostra una lista di tutte le risorse film.
      */
     public function index()
-    {
-        $filmModel = new Film();
-        $data = [
-            'films' => $filmModel->findAll()
-        ];
-        return view('admin/films/index', $data);
-    }
+{
+    $filmModel = new \App\Models\Film();
+
+    $data = [
+        // Metoda paginate() automatski dohvaća podatke za trenutnu stranicu.
+        // Broj 10 označava koliko unosa želimo po stranici.
+        'films' => $filmModel->orderBy('id', 'DESC')->paginate(10),
+
+        // Prosljeđujemo 'pager' objekt view-u, on sadrži linkove za navigaciju.
+        'pager' => $filmModel->pager
+    ];
+
+    return view('admin/films/index', $data);
+}
 
     /**
      * Mostra il form per creare un nuovo film.
