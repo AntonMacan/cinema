@@ -9,16 +9,19 @@ use App\Models\CompagniaTeatrale;
 class SpettacoloController extends BaseController
 {
     /**
-     * Mostra una lista di tutti gli spettacoli.
-     */
-    public function index()
-    {
-        $spettacoloModel = new Spettacolo();
-        $data = [
-            'spettacoli' => $spettacoloModel->findAll()
-        ];
-        return view('admin/spettacoli/index', $data);
-    }
+ * Mostra una lista paginata di tutti gli spettacoli.
+ */
+public function index()
+{
+    $spettacoloModel = new Spettacolo();
+
+    $data = [
+        'spettacoli' => $spettacoloModel->orderBy('id', 'DESC')->paginate(10),
+        'pager' => $spettacoloModel->pager
+    ];
+
+    return view('admin/spettacoli/index', $data);
+}
 
     /**
      * Mostra il form per creare un nuovo spettacolo.

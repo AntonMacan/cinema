@@ -5,18 +5,19 @@ Spettacoli
 <?= $this->section('content') ?>
 <div class="container">
     <h1>Lista degli Spettacoli</h1>
-    <a href="/admin/spettacoli/new">+ Aggiungi Nuovo Spettacolo</a>
+
+    <a href="/admin/spettacoli/new" class="btn btn-primary mb-20">+ Aggiungi Nuovo Spettacolo</a>
 
     <?php if (session()->get('success')): ?>
         <div class="alert alert-success"><?= session()->get('success') ?></div>
     <?php endif; ?>
 
-    <table border="1" cellpadding="5" width="100%">
+    <table class="table-admin">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Titolo</th>
-                <th>Azioni</th>
+                <th width="200px">Azioni</th>
             </tr>
         </thead>
         <tbody>
@@ -26,13 +27,15 @@ Spettacoli
                         <td><?= $spettacolo->id ?></td>
                         <td><?= esc($spettacolo->titolo) ?></td>
                         <td>
-                            <a href="/admin/spettacoli/edit/<?= $spettacolo->id ?>">Modifica</a> |
-                            <form action="/admin/spettacoli/delete/<?= $spettacolo->id ?>" method="post" >
-                                <?= csrf_field() ?>
-                                <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo spettacolo?');" >
-                                    Elimina
-                                </button>
-                            </form>
+                            <div class="actions-group">
+                                <a href="/admin/spettacoli/edit/<?= $spettacolo->id ?>" class="btn btn-sm btn-info">Modifica</a>
+                                <form action="/admin/spettacoli/delete/<?= $spettacolo->id ?>" method="post">
+                                    <?= csrf_field() ?>
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo spettacolo?');">
+                                        Elimina
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -43,5 +46,10 @@ Spettacoli
             <?php endif; ?>
         </tbody>
     </table>
+
+    <div class="pager-container">
+        <?= $pager->links() ?>
+    </div>
+
 </div>
 <?= $this->endSection() ?>

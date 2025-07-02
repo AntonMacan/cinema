@@ -139,9 +139,9 @@ public function register()
     }
 
     /**
-     * Mostra la pagina del profilo dell'utente con la cronologia dei biglietti.
+     * Mostra la pagina del ticketso dell'utente con la cronologia dei biglietti.
      */
-    public function profil()
+    public function tickets()
     {
         $bigliettoModel = new \App\Models\Biglietto();
 
@@ -155,8 +155,8 @@ public function register()
                             ->findAll()
         ];
 
-        // Carica la vista del profilo e passa i dati
-        return view('profil', $data);
+        // Carica la vista del ticketso e passa i dati
+        return view('tickets', $data);
     }
 
     /**

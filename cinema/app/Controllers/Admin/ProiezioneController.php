@@ -15,9 +15,10 @@ class ProiezioneController extends BaseController
      */
     public function index()
     {
-        $proiezioneModel = new \App\Models\Proiezione();
+        $proiezioneModel = new Proiezione();
         $data = [
-            'proiezioni' => $proiezioneModel->orderBy('data', 'DESC')->findAll()
+           'proiezioni' => $proiezioneModel->orderBy('data', 'DESC')->orderBy('orario', 'DESC')->paginate(15),
+           'pager' => $proiezioneModel->pager
         ];
         return view('admin/proiezioni/index', $data);
     }

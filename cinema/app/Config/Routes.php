@@ -9,7 +9,7 @@ $routes->get('/', 'HomeController::index');
 $routes->match(['GET', 'POST'], '/register', 'UtenteController::register');
 $routes->match(['GET', 'POST'], 'login', 'UtenteController::login');
 $routes->get('dashboard', 'DashboardController::index', ['filter' => 'auth']);
-$routes->get('tickets', 'UtenteController::profil', ['filter' => 'auth']);
+$routes->get('tickets', 'UtenteController::tickets', ['filter' => 'auth']);
 $routes->get('logout', 'UtenteController::logout');
 $routes->group('admin', ['filter' => 'auth:gestore'], static function ($routes) {
     $routes->get('films', 'Admin\FilmController::index');

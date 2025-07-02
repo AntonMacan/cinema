@@ -4,20 +4,20 @@
     </div>
     <nav>
         <ul style="list-style: none; margin: 0; padding: 0; display: flex; gap: 20px;">
-            <li><a href="/" style="color: white;">Proiezioni</a></li>
+            <li><a href="/" style="color: white;">Home</a></li>
             
             <?php if (session()->get('isLoggedIn')): ?>
-                
+                <li><a href="/tickets" style="color: white;">I miei biglietti</a></li>
                 <?php // Prikaz samo ako je korisnik 'gestore' ?>
                 <?php if (session()->get('ruolo') === 'gestore'): ?>
-                    <li><a href="/admin/films" style="color: #ffc107;">Film</a></li>
-                    <li><a href="/admin/spettacoli" style="color: #ffc107;">Spettacoli</a></li>
-                    <li><a href="/admin/proiezioni" style="color: #ffc107;">Proiezioni</a></li>
+                    <li><a href="/admin/films" style="color: white;">Film</a></li>
+                    <li><a href="/admin/spettacoli" style="color: white;">Spettacoli</a></li>
+                    <li><a href="/admin/proiezioni" style="color: white;">Proiezioni</a></li>
                 <?php endif; ?>
 
-                <li><a href="/tickets" style="color: white;">I miei biglietti</a></li>
+                
                 <li style="color: #ccc;">
-                    | <span>Benvenuto, <?= esc(session()->get('nome')) ?></span>
+                    |   <span>Benvenuto, <?= esc(session()->get('nome')) ?></span>
                 </li>
                 <li><a href="/logout" style="color: #dc3545;">Logout</a></li>
 

@@ -1,11 +1,10 @@
 <?= $this->extend('layouts/main_layout') ?>
 
-<?= $this->section('title') ?>Il Mio Profilo<?= $this->endSection() ?>
+<?= $this->section('title') ?>I Miei Biglietti<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 
-<h1>Il Mio Profilo</h1>
-<h2>I Miei Biglietti Acquistati</h2>
+<h1>I Miei Biglietti</h1>
 
 <?php
 try {
