@@ -4,7 +4,11 @@
 
 <?= $this->section('content') ?>
 
-<h1>I Miei Biglietti</h1>
+<div class="profile-header">
+    <h1>I Miei Biglietti</h1>
+</div>
+
+<h2>Cronologia Acquisti</h2>
 
 <?php
 try {
@@ -13,42 +17,60 @@ try {
     $now = \CodeIgniter\I18n\Time::now();
 }
 
-if (!empty($biglietti)):
-    foreach ($biglietti as $biglietto):
+if (!empty($pagamenti)):
+    foreach ($pagamenti as $pagamento):
 
-        $proiezione = $biglietto->getProiezione();
-
-        $ticketClass = '';
+        $firstBiglietto = $pagamento->getBiglietti()[0] ?? null;
+        $proiezione = $firstBiglietto ? $firstBiglietto->getProiezione() : null;
+        $isExpired = true;
+        $ticketClass = 'ticket-expired';
 
         if ($proiezione) {
-            $showtime = \CodeIgniter\I18n\Time::parse($proiezione->data . ' ' . $proiezione->orario, 'Europe/Zagreb');
-
-            if ($showtime->isBefore($now)) {
-                $ticketClass = 'ticket-expired'; 
+            $showtime = \CodeIgniter\I18n\Time::parse($proiezione->data . ' ' . $proiezione->orario, 'Europe/Rome');
+            
+            if (!$showtime->isBefore($now)) {
+                $isExpired = false;
+                $ticketClass = '';
             }
-        } else {
-            $ticketClass = 'ticket-expired';
         }
-
-        $contenuto = $proiezione ? ($proiezione->getFilm() ?? $proiezione->spettacolo) : null;
+        
+        $contenuto = $proiezione ? ($proiezione->getFilm() ?? $proiezione->getSpettacolo()) : null;
 ?>
-        <div class="ticket <?= $ticketClass ?>">
-            <div class="ticket-header">
-                <h3><?= esc($contenuto->titolo ?? 'Contenuto Sconosciuto') ?></h3>
+        <div class="purchase-group <?= $ticketClass ?>">
+            <div class="purchase-header">
+                <div>
+                    <h4>Acquisto del: <?= \CodeIgniter\I18n\Time::parse($pagamento->data)->toLocalizedString('dd MMMM y, HH:mm') ?>h</h4>
+                    <span>ID Transazione: <?= $pagamento->id ?></span>
+                </div>
+                <div class="purchase-total">
+                    <strong>Totale: <?= number_format($pagamento->importo, 2) ?> €</strong>
+                    
+                    <?php if ($isExpired): ?>
+                        <button class="btn btn-sm" disabled>Biglietti</button>
+                    <?php else: ?>
+                        <a href="/booking/pdf/<?= $pagamento->id ?>" class="btn btn-sm btn-info" target="_blank">Biglietti</a>
+                    <?php endif; ?>
+
+                </div>
             </div>
-            <div class="ticket-details">
-                <strong>Data:</strong> <?= $proiezione ? date('d.m.Y', strtotime($proiezione->data)) : 'N/D' ?><br>
-                <strong>Orario:</strong> <?= $proiezione ? date('H:i', strtotime($proiezione->orario)) : 'N/D' ?>h<br>
-                <strong>Tipo Biglietto:</strong> <?= esc($biglietto->tipo) ?><br>
-                <strong>Prezzo:</strong> <?= number_format($biglietto->prezzo, 2) ?> €<br>
-                <strong>Acquistato il:</strong> <?= date('d.m.Y H:i', strtotime($biglietto->created_at)) ?>
+            <div class="purchase-body">
+                <h5>Dettagli Proiezione:</h5>
+                <p>
+                    <strong><?= esc($contenuto->titolo ?? 'Contenuto Sconosciuto') ?></strong><br>
+                    <?= $proiezione ? \CodeIgniter\I18n\Time::parse($proiezione->data)->toLocalizedString('EEEE, dd MMMM y') : '' ?> 
+                    alle <?= $proiezione ? date('H:i', strtotime($proiezione->orario)) : '' ?>h
+                </p>
+                <h5>Biglietti in questo acquisto:</h5>
+                <ul>
+                   <?php foreach ($pagamento->getBiglietti() as $biglietto): ?>
+                        <li>Biglietto <?= esc($biglietto->tipo) ?> (<?= number_format($biglietto->prezzo, 2) ?> €)</li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
         </div>
-    <?php 
-    endforeach; 
-else: 
-?>
-    <p>Non hai ancora acquistato nessun biglietto.</p>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p>Non hai ancora effettuato nessun acquisto.</p>
 <?php endif; ?>
 
 <?= $this->endSection() ?>

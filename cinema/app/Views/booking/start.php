@@ -5,7 +5,7 @@
 <?= $this->section('content') ?>
 
 <?php
-    $contenuto = $proiezione->getFilm() ?? $proiezione->spettacolo;
+    $contenuto = $proiezione->getFilm() ?? $proiezione->getSpettacolo();
 ?>
 
 <h1>Prenotazione Biglietti</h1>

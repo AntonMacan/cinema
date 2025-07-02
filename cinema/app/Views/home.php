@@ -67,7 +67,7 @@ Cine-Teatro
 
 <ul id="full-schedule-list" style="list-style: none; padding: 0;">
     <?php foreach ($tutte_le_proiezioni as $proiezione): ?>
-        <?php $contenuto = $proiezione->getFilm() ?? $proiezione->spettacolo; ?>
+        <?php $contenuto = $proiezione->getFilm() ?? $proiezione->getSpettacolo(); ?>
         <?php if (!$contenuto) continue; ?>
 
         <li class="schedule-item" data-date="<?= $proiezione->data ?>" data-title="<?= strtolower(esc($contenuto->titolo)) ?>">

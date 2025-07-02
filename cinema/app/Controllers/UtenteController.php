@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Utente;
+use App\Models\Pagamento;
 
 class UtenteController extends BaseController
 {
@@ -143,17 +144,15 @@ public function register()
      */
     public function tickets()
     {
-        $bigliettoModel = new \App\Models\Biglietto();
-
-        // Ottieni l'ID dell'utente loggato dalla sessione
+        $pagamentoModel = new Pagamento();
         $userId = session()->get('user_id');
 
         $data = [
-            // Trova tutti i biglietti che appartengono a questo utente
-            'biglietti' => $bigliettoModel
-                            ->where('cliente_id', $userId)
-                            ->findAll()
+            'pagamenti' => $pagamentoModel->where('cliente_id', $userId)
+                                        ->orderBy('data', 'DESC')
+                                        ->findAll()
         ];
+
 
         // Carica la vista del ticketso e passa i dati
         return view('tickets', $data);
@@ -185,4 +184,64 @@ public function register()
             return redirect()->to('/login')->with('error', 'Token di verifica non valido o scaduto.');
         }
     }
+
+    /**
+ * Mostra il form per modificare il profilo e processa i dati inviati.
+ */
+public function profile()
+{
+    helper(['form']);
+    $userModel = new Utente();
+    $userId = session()->get('user_id');
+
+    // Se la richiesta è POST, processa i dati del form
+    if ($this->request->is('POST')) {
+        $action = $this->request->getPost('action');
+
+        // --- Logica per aggiornare i dati dell'utente ---
+        if ($action === 'update_details') {
+            $rules = ['nome' => 'required|min_length[3]|max_length[50]'];
+
+            if ($this->validate($rules)) {
+                $newData = ['nome' => $this->request->getPost('nome')];
+                $userModel->update($userId, $newData);
+
+                // Aggiorna anche il nome nella sessione!
+                session()->set('nome', $newData['nome']);
+                return redirect()->to('/profile')->with('success', 'Dati aggiornati con successo.');
+            }
+        }
+
+        // --- Logica per cambiare la password ---
+        if ($action === 'update_password') {
+            $rules = [
+                'current_password' => 'required',
+                'new_password'     => 'required|min_length[8]',
+                'password_confirm' => 'matches[new_password]'
+            ];
+
+            if ($this->validate($rules)) {
+                $user = $userModel->find($userId);
+                $currentPassword = $this->request->getPost('current_password');
+                $newPassword = $this->request->getPost('new_password');
+
+                // Controlla se la password attuale è corretta
+                if (password_verify($currentPassword, $user->password)) {
+                    $userModel->update($userId, ['password' => $newPassword]); // Il modello farà l'hashing automaticamente
+                    return redirect()->to('/profile')->with('success', 'Password cambiata con successo.');
+                } else {
+                    return redirect()->back()->withInput()->with('error', 'La password attuale non è corretta.');
+                }
+            }
+        }
+    }
+
+    // Se la richiesta è GET, mostra semplicemente il form con i dati attuali
+    $data = [
+        'utente' => $userModel->find($userId),
+        'validation' => $this->validator // Passa il validatore per mostrare gli errori
+    ];
+
+    return view('profile', $data);
+}
 }

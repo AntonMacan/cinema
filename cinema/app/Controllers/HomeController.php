@@ -40,10 +40,9 @@ class HomeController extends BaseController
         ->orderBy('orario', 'ASC')
         ->findAll();
 
-    // Ostatak metode za grupiranje za galeriju ostaje POTPUNO ISTI
     $contenutiConProiezioni = [];
     foreach ($proiezioni as $proiezione) {
-        $contenuto = $proiezione->getFilm() ?? $proiezione->spettacolo;
+        $contenuto = $proiezione->getFilm() ?? $proiezione->getSpettacolo();
         if (!$contenuto) continue;
 
         $contenutoKey = ($proiezione->film_id ? 'film_' : 'spettacolo_') . $contenuto->id;

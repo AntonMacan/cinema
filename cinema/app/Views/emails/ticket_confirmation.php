@@ -9,7 +9,7 @@
     <p>Ciao <?= esc(session()->get('nome')) ?>, la tua prenotazione è stata confermata con successo.</p>
     <p>In allegato trovi la conferma in formato PDF.</p>
 
-    <?php $contenuto = $proiezione->getFilm() ?? $proiezione->spettacolo; ?>
+    <?php $contenuto = $proiezione->getFilm() ?? $proiezione->getSpettacolo(); ?>
     <h2>Dettagli della Proiezione:</h2>
     <ul>
         <li><strong>Contenuto:</strong> <?= esc($contenuto->titolo) ?></li>

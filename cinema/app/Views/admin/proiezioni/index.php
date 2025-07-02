@@ -32,7 +32,7 @@ Amministrazione Proiezioni
                         <td>
                             <?php
                                 // Koristimo naše ručne metode koje pouzdano rade
-                                $contenuto = $proiezione->getFilm() ?? $proiezione->spettacolo;
+                                $contenuto = $proiezione->getFilm() ?? $proiezione->getSpettacolo();
                             ?>
                             <?php if ($contenuto): ?>
                                 <small><?= $proiezione->film_id ? 'Film:' : 'Spettacolo:' ?></small><br>

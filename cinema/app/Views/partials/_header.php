@@ -8,7 +8,7 @@
             
             <?php if (session()->get('isLoggedIn')): ?>
                 <li><a href="/tickets" style="color: white;">I miei biglietti</a></li>
-                <?php // Prikaz samo ako je korisnik 'gestore' ?>
+                <li><a href="/profile" style="color: white;">Il mio profilo</a></li>
                 <?php if (session()->get('ruolo') === 'gestore'): ?>
                     <li><a href="/admin/films" style="color: white;">Film</a></li>
                     <li><a href="/admin/spettacoli" style="color: white;">Spettacoli</a></li>

@@ -19,7 +19,7 @@
     <p style="text-align: center;">ID Pagamento: <?= esc($pagamento->id) ?></p>
 
     <?php if (isset($proiezione)): ?>
-        <?php $contenuto = $proiezione->getFilm() ?? $proiezione->spettacolo; ?>
+        <?php $contenuto = $proiezione->getFilm() ?? $proiezione->getSpettacolo(); ?>
         <div class="info-section">
             <h2>Dettagli Proiezione</h2>
             <p><strong>Contenuto:</strong> <?= esc($contenuto->titolo ?? 'N/D') ?></p>

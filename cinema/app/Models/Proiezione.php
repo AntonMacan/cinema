@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use \App\Models\Film;
+use \App\Models\Spettacolo;
 
 class Proiezione extends Model
 {
@@ -24,33 +26,27 @@ class Proiezione extends Model
     ];
     protected $useTimestamps    = true;
 
-    public function film()
-    {
-        return $this->belongsTo(Film::class, 'film_id');
-    }
-
     public function getFilm()
-{
-    if (empty($this->film_id)) {
-        return null;
+    {
+        if (empty($this->film_id)) return null;
+        return (new Film())->find($this->film_id);
     }
 
-    $filmModel = new \App\Models\Film();
-    return $filmModel->find($this->film_id);
-}
-
-    public function spettacolo()
+    public function getSpettacolo()
     {
-        return $this->belongsTo(Spettacolo::class, 'spettacolo_id');
+        if (empty($this->spettacolo_id)) return null;
+        return (new Spettacolo())->find($this->spettacolo_id);
     }
 
-    public function fasciaOraria()
+    public function getFasciaOraria()
     {
-        return $this->belongsTo(FasciaOraria::class, 'fascia_oraria_id');
+        if (empty($this->fascia_oraria_id)) return null;
+        return (new FasciaOraria())->find($this->fascia_oraria_id);
     }
 
-    public function gestore()
+    public function getGestore()
     {
-        return $this->belongsTo(Utente::class, 'gestore_id');
+        if (empty($this->gestore_id)) return null;
+        return (new Utente())->find($this->gestore_id);
     }
 }

@@ -21,11 +21,6 @@ class Biglietto extends Model
     
     protected $useTimestamps    = false;
 
-    public function proiezione()
-    {
-        return $this->getProiezione(); // Koristimo našu ručnu metodu
-    }
-
     public function getProiezione()
     {
         if (empty($this->proiezione_id)) {

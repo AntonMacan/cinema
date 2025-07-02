@@ -41,3 +41,4 @@ $routes->get('booking/success/(:num)', 'BookingController::success/$1');
 $routes->get('booking/pdf/(:num)', 'BookingController::generatePdf/$1');
 $routes->get('verify/(:segment)', 'UtenteController::verify/$1');
 $routes->post('recensioni/create', 'RecensioneController::create', ['filter' => 'auth']);
+$routes->match(['GET', 'POST'], 'profile', 'UtenteController::profile', ['filter' => 'auth']);

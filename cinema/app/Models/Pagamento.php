@@ -23,4 +23,9 @@ class Pagamento extends Model
     {
         return $this->belongsTo(Utente::class, 'cliente_id');
     }
+
+    public function getBiglietti()
+    {
+        return (new \App\Models\Biglietto())->where('pagamento_id', $this->id)->findAll();
+    }
 }
